@@ -6,11 +6,11 @@ managed:
 plugins:
   # python
   - remote: buf.build/protocolbuffers/python
-    out: src/xionpy/protos
+    out: xionpy/protos
   - remote: buf.build/protocolbuffers/pyi
-    out: src/xionpy/protos
+    out: xionpy/protos
   - remote: buf.build/grpc/python
-    out: src/xionpy/protos
+    out: xionpy/protos
 
 inputs:
   - directory: build/cosmos-sdk/proto

@@ -10,3 +10,35 @@
 #   universal: false
 
 -e file:.
+bech32==1.2.0
+    # via xionpy
+certifi==2024.7.4
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
+ecdsa==0.19.0
+    # via xionpy
+grpcio==1.65.5
+    # via xionpy
+idna==3.7
+    # via requests
+iniconfig==2.0.0
+    # via pytest
+packaging==24.1
+    # via pytest
+pluggy==1.5.0
+    # via pytest
+protobuf==5.27.3
+    # via xionpy
+pycryptodome==3.20.0
+    # via xionpy
+pytest==8.3.2
+    # via xionpy
+requests==2.32.3
+    # via xionpy
+ruff==0.6.1
+    # via xionpy
+six==1.16.0
+    # via ecdsa
+urllib3==2.2.2
+    # via requests

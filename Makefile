@@ -51,3 +51,11 @@ $(XIOND_DIR): Makefile
 	rm -rfv $(XIOND_DIR)
 	git clone --branch $(XIOND_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(XIOND_URL) $(XIOND_DIR)
 	cd $(XIOND_DIR) && git checkout $(XIOND_VERSION)
+
+########################################
+### Linting and formatting
+########################################
+
+ruff:
+	@echo "Running ruff..."
+	@ruff check --fix .

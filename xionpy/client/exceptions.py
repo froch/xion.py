@@ -1,0 +1,3 @@
+
+class NetworkConfigError(RuntimeError):
+    pass
