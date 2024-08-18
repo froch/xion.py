@@ -1,3 +1,7 @@
+COSMOS_GOGO_PROTO_URL := https://github.com/cosmos/gogoproto
+COSMOS_GOGO_PROTO_VERSION := v1.5.0
+COSMOS_GOGO_PROTO_DIR := build/cosmos-gogoproto
+
 COSMOS_SDK_URL := https://github.com/cosmos/cosmos-sdk
 COSMOS_SDK_VERSION := v0.50.8
 COSMOS_SDK_DIR := build/cosmos-sdk
@@ -18,7 +22,7 @@ XIOND_DIR := build/xion
 ### Generate protos and grpc files
 ########################################
 
-proto: fetch_proto_src buf-deps buf-gen
+proto: fetch_proto_src #buf-deps buf-gen
 
 buf-deps:
 	@echo "Updating buf depdendencies..."
@@ -30,7 +34,12 @@ buf-gen:
 	@buf build
 	@buf generate
 
-fetch_proto_src: $(COSMOS_SDK_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
+fetch_proto_src: $(COSMOS_GOGO_PROTO_DIR) $(COSMOS_SDK_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
+
+$(COSMOS_GOGO_PROTO_DIR): Makefile
+	rm -rfv $(COSMOS_GOGO_PROTO_DIR)
+	git clone --branch $(COSMOS_GOGO_PROTO_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(COSMOS_GOGO_PROTO_URL) $(COSMOS_GOGO_PROTO_DIR)
+	cd $(COSMOS_GOGO_PROTO_DIR) && git checkout $(COSMOS_GOGO_PROTO_VERSION)
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)

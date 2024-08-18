@@ -2,11 +2,19 @@ version: v2
 
 deps:
   - buf.build/cosmos/cosmos-proto:1935555c206d4afb9e94615dfd0fad31
-  - buf.build/cosmos/gogo-proto:a14993478f40695898ed8a86931094b6656e8a5d
   - buf.build/googleapis/googleapis:8d7204855ec14631a499bd7393ce1970
   - buf.build/cosmos/ics23:b1abd8678aab07165efd453c96796a179eb3131f
 
 modules:
+  - path: build/cosmos-gogoproto
+    excludes:
+      - build/cosmos-gogoproto/conformance
+      - build/cosmos-gogoproto/jsonpb
+      - build/cosmos-gogoproto/proto
+      - build/cosmos-gogoproto/protobuf
+      - build/cosmos-gogoproto/protoc-gen-gogo
+      - build/cosmos-gogoproto/test
+      - build/cosmos-gogoproto/vanity
   - path: build/cosmos-sdk/proto
   - path: build/ibc-go/proto
   - path: build/wasmd/proto

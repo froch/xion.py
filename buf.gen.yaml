@@ -13,6 +13,7 @@ plugins:
     out: xionpy/protos
 
 inputs:
+  - directory: build/cosmos-gogoproto
   - directory: build/cosmos-sdk/proto
   - directory: build/ibc-go/proto
   - directory: build/wasmd/proto
