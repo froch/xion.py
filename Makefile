@@ -6,6 +6,10 @@ COSMOS_SDK_URL := https://github.com/cosmos/cosmos-sdk
 COSMOS_SDK_VERSION := v0.50.8
 COSMOS_SDK_DIR := build/cosmos-sdk
 
+GOOGLE_API_URL := https://github.com/gogo/googleapis
+GOOGLE_API_VERSION := v1.4.1
+GOOGLE_API_DIR := build/google-apis
+
 IBC_GO_URL := https://github.com/cosmos/ibc-go
 IBC_GO_VERSION := v8.4.0
 IBC_GO_DIR := build/ibc-go
@@ -34,7 +38,8 @@ buf-gen:
 	@buf build
 	@buf generate
 
-fetch_proto_src: $(COSMOS_GOGO_PROTO_DIR) $(COSMOS_SDK_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
+fetch_proto_src: $(GOOGLE_API_DIR)
+#fetch_proto_src: $(COSMOS_GOGO_PROTO_DIR) $(COSMOS_SDK_DIR) $(GOOGLE_API_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
 
 $(COSMOS_GOGO_PROTO_DIR): Makefile
 	rm -rfv $(COSMOS_GOGO_PROTO_DIR)
@@ -45,6 +50,11 @@ $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
 	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(COSMOS_SDK_URL) $(COSMOS_SDK_DIR)
 	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION)
+
+$(GOOGLE_API_DIR): Makefile
+	rm -rfv $(GOOGLE_API_DIR)
+	git clone --branch $(GOOGLE_API_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(GOOGLE_API_URL) $(GOOGLE_API_DIR)
+	cd $(GOOGLE_API_DIR) && git checkout $(GOOGLE_API_VERSION)
 
 $(IBC_GO_DIR): Makefile
 	rm -rfv $(IBC_GO_DIR)
