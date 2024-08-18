@@ -14,5 +14,6 @@ plugins:
 
 inputs:
   - directory: build/cosmos-sdk/proto
+  - directory: build/ibc-go/proto
   - directory: build/wasmd/proto
   - directory: build/xion/proto
