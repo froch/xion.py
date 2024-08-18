@@ -72,7 +72,6 @@ class XionWallet(Wallet):
         return XionWallet(PrivateKey(private_key_bytes), prefix=prefix)
 
     def __init__(self, private_key: PrivateKey, prefix: Optional[str] = None):
-        super().__init__()
         self._private_key = private_key
         self._public_key = private_key.public_key
         self._prefix = prefix

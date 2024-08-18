@@ -10,3 +10,6 @@ def test_bank_balance():
     client = XionClient(NetworkConfig.localhost())
 
     balance = client.query_bank_balance(wallet.address())
+    assert balance is not None
+    assert isinstance(balance, int)
+    assert balance >= 0

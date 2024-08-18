@@ -4,7 +4,7 @@ from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from xionpy.coins import parse_coins
+from xionpy.client.coins import parse_coins
 from xionpy.crypto.interface import Signer
 from xionpy.crypto.keypairs import PublicKey
 from xionpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
