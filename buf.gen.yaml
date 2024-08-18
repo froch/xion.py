@@ -14,6 +14,7 @@ plugins:
 
 inputs:
   - directory: build/cosmos-gogoproto
+  - directory: build/cosmos-proto/proto
   - directory: build/cosmos-sdk/proto
   - directory: build/google-apis
   - directory: build/ibc-go/proto
