@@ -7,7 +7,7 @@ deps:
 
 modules:
   - path: build/cosmos-sdk/proto
-#  - path: build/xion/proto
+  - path: build/xion/proto
 
 lint:
   use:

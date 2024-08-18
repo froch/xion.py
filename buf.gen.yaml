@@ -14,4 +14,4 @@ plugins:
 
 inputs:
   - directory: build/cosmos-sdk/proto
-#  - directory: build/xion/proto
+  - directory: build/xion/proto
