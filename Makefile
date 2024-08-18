@@ -18,7 +18,7 @@ XIOND_DIR := build/xion
 ### Generate protos and grpc files
 ########################################
 
-proto: fetch_proto_src #buf-deps buf-gen
+proto: fetch_proto_src buf-deps buf-gen
 
 buf-deps:
 	@echo "Updating buf depdendencies..."
