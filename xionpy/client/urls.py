@@ -25,7 +25,9 @@ class ParsedUrl:
 
     @property
     def rest_url(self) -> str:
-        assert self.protocol == Protocol.REST
+        if self.protocol != Protocol.REST:
+            raise ValueError(f"Expected REST protocol, got {Protocol(self.protocol)}")
+
         if self.secure:
             prefix = "https"
             default_port = 443

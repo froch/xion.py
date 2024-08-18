@@ -1,3 +1,5 @@
+import math
+import os
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
@@ -32,7 +34,8 @@ class GasStrategy(ABC):
 
 class SimulationGasStrategy(GasStrategy):
 
-    DEFAULT_MULTIPLIER = 1.3
+    DEFAULT_MULTIPLIER = os.getenv("XION_GAS_ADJUSTMENT", 1.4)
+    DEFAULT_MARGIN = os.getenv("XION_GAS_ADJUSTMENT_MARGIN", 6000)
 
     def __init__(self, client: "XionClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
         self._client = client
@@ -40,20 +43,21 @@ class SimulationGasStrategy(GasStrategy):
         self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
 
     def estimate_gas(self, tx: Transaction) -> int:
-        gas_estimate = self._client.simulate_tx(tx)
-        return self._clip_gas(int(gas_estimate * self._multiplier))
+        gas_estimate = self._client.simulate_tx(tx) + self.DEFAULT_MARGIN
+        gas_adjusted = math.ceil(gas_estimate * self._multiplier)
+        return self._clip_gas(gas_adjusted)
 
     def block_gas_limit(self) -> int:
         if self._max_gas is None:
-            block_params = self._client.query_params("baseapp", "BlockParams")
-            self._max_gas = int(block_params["max_gas"])
-
+            # TODO(froch, 20240818): this subspace doesn't exist
+            # block_params = self._client.query_params("baseapp", "BlockParams")
+            self._max_gas = 250_000
         return self._max_gas or -1
 
 
 class OfflineMessageTableStrategy(GasStrategy):
 
-    DEFAULT_FALLBACK_GAS_LIMIT = 200_000
+    DEFAULT_FALLBACK_GAS_LIMIT = 250_000
     DEFAULT_BLOCK_LIMIT = 1_000_000
 
     @staticmethod

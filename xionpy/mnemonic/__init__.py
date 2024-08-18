@@ -18,13 +18,8 @@ COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
 
 def split_hmac(data: bytes) -> Tuple[bytes, bytes]:
-    """
-    Split HMAC data into two halves.
-
-    :param data: bytes
-    :return: Tuple[bytes, bytes]
-    """
-    assert len(data) == HMAC_LEN
+    if len(data) != HMAC_LEN:
+        raise ValueError(f"Invalid HMAC length ({len(data)})")
     return data[:HMAC_HALF_LEN], data[HMAC_HALF_LEN:]
 
 

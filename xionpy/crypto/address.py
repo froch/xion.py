@@ -2,8 +2,10 @@ from collections import UserString
 from typing import Optional, Union
 
 import bech32
-from xionpy.crypto.hashfuncs import ripemd160, sha256
+
+from xionpy.crypto.hashfuncs import sha256, ripemd160
 from xionpy.crypto.keypairs import PublicKey
+
 
 DEFAULT_PREFIX = "xion"
 

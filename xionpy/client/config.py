@@ -3,6 +3,7 @@ from typing import Optional, Union
 
 from xionpy.client.exceptions import NetworkConfigError
 
+
 URL_PREFIXES = (
     "grpc+https",
     "grpc+http",

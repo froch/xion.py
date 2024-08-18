@@ -2,7 +2,7 @@
 # use `rye lock` or `rye sync` to update this lockfile
 #
 # last locked with the following flags:
-#   pre: false
+#   pre: true
 #   features: []
 #   all-features: false
 #   with-sources: false
@@ -10,6 +10,9 @@
 #   universal: false
 
 -e file:.
+backoff==2.2.1
+    # via xionpy
+bandit==1.7.9
 bech32==1.2.0
     # via xionpy
 certifi==2024.7.4
@@ -24,21 +27,37 @@ idna==3.7
     # via requests
 iniconfig==2.0.0
     # via pytest
+isort==5.13.2
+markdown-it-py==3.0.0
+    # via rich
+mdurl==0.1.2
+    # via markdown-it-py
 packaging==24.1
     # via pytest
+pbr==6.0.0
+    # via stevedore
 pluggy==1.5.0
     # via pytest
 protobuf==5.27.3
     # via xionpy
 pycryptodome==3.20.0
     # via xionpy
+pygments==2.18.0
+    # via rich
 pytest==8.3.2
+python-dateutil==2.9.0.post0
     # via xionpy
+pyyaml==6.0.2
+    # via bandit
 requests==2.32.3
     # via xionpy
+rich==13.7.1
+    # via bandit
 ruff==0.6.1
-    # via xionpy
 six==1.16.0
     # via ecdsa
+    # via python-dateutil
+stevedore==5.2.0
+    # via bandit
 urllib3==2.2.2
     # via requests

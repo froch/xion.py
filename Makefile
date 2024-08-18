@@ -26,6 +26,10 @@ XIOND_URL := https://github.com/burnt-labs/xion
 XIOND_VERSION := v9.0.0
 XIOND_DIR := build/xion
 
+XIONPY_PROTOS_DIR := xionpy/protos
+XIONPY_SRC_DIR := xionpy
+XIONPY_TESTS_DIR := tests
+
 ########################################
 ### Generate protos and grpc files
 ########################################
@@ -91,6 +95,23 @@ $(XIOND_DIR): Makefile
 ### Linting and formatting
 ########################################
 
+lint: ruff isort
+
+isort:
+	@echo "Running isort..."
+	@isort .
+
 ruff:
 	@echo "Running ruff..."
 	@ruff check --fix .
+
+########################################
+### Security & safety checks
+########################################
+
+.PHONY: safe
+safe: bandit
+
+.PHONY: bandit
+bandit:
+	bandit -r $(XIONPY_SRC_DIR)
