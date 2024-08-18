@@ -1,5 +1,5 @@
 [project]
-name = "xion"
+name = "xionpy"
 version = "0.1.0"
 description = "Python SDK for XION - the Generalized Chain Abstraction Layer"
 authors = [
@@ -21,4 +21,4 @@ dev-dependencies = []
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/xion"]
+packages = ["src/xionpy"]
