@@ -7,6 +7,7 @@ deps:
 
 modules:
   - path: build/cosmos-sdk/proto
+  - path: build/wasmd/proto
   - path: build/xion/proto
 
 lint:

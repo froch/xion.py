@@ -14,4 +14,5 @@ plugins:
 
 inputs:
   - directory: build/cosmos-sdk/proto
+  - directory: build/wasmd/proto
   - directory: build/xion/proto
