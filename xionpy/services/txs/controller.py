@@ -1,5 +1,5 @@
 import math
-from typing import Any, Tuple
+from typing import Any, Optional, Tuple
 
 import backoff
 import grpc
@@ -16,10 +16,12 @@ from xionpy.protos.cosmos.tx.v1beta1.service_pb2 import (
 from xionpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import (
     ServiceStub as TxsGrpcClient,
 )
+from xionpy.services.auth.controller import XionAuthController
 from xionpy.services.controller import XionBaseController
 from xionpy.services.txs.gas import GasStrategy
 from xionpy.services.txs.model import (
     MessageLog,
+    SigningCfg,
     SubmittedTx,
     Transaction,
     TxResponse,
@@ -37,9 +39,13 @@ class XionTxsController(XionBaseController):
             self,
             cfg: NetworkConfig,
             gas_strategy: GasStrategy,
+            auth: "XionAuthController",  # type: ignore # noqa: F821
      ):
         super().__init__(cfg)
+
         self.gas_strategy = gas_strategy
+        self.auth = auth
+
         if isinstance(self.binding, grpc.Channel):
             self.client = TxsGrpcClient(self.binding)
         else:
@@ -67,6 +73,49 @@ class XionTxsController(XionBaseController):
         resp = self.client.Simulate(req)
 
         return int(resp.gas_info.gas_used)
+
+    def submit(
+            self,
+            tx: "Transaction",  # type: ignore # noqa: F821
+            sender: "Wallet",  # type: ignore # noqa: F821
+            account: Optional["Account"] = None,  # type: ignore # noqa: F821
+            gas_limit: Optional[int] = None,
+            memo: Optional[str] = None,
+    ) -> TxResponse:
+
+        if account is None:
+            account = self.auth.query_account(sender.address())
+
+        # estimate the fee for a provided gas limit
+        if gas_limit is not None:
+            fee = self.estimate_fee_from_gas(gas_limit)
+
+        # simulate the gas and fee for the transaction
+        else:
+            fee = f"{self.cfg.min_fee}{self.cfg.denom_fee}"
+            tx.seal(
+                SigningCfg.direct(sender.public_key(), account.sequence),
+                fee=fee,
+                gas_limit=self.gas_strategy.block_gas_limit(),
+                memo=memo,
+            )
+            tx.sign(sender.signer(), self.cfg.chain_id, account.number)
+            tx.complete()
+
+            gas_limit, fee = self.estimate_gas_and_fee(tx)
+
+        # build the final transaction
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee=fee,
+            gas_limit=gas_limit,
+            memo=memo,
+        )
+        tx.sign(sender.signer(), self.cfg.chain_id, account.number)
+        tx.complete()
+
+        submitted_tx = self.broadcast(tx)
+        return submitted_tx.check_success()
 
     def broadcast(self, tx: Transaction) -> SubmittedTx:
         # broadcast the transaction
