@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import Optional, Union
 
@@ -40,12 +41,12 @@ class NetworkConfig:
     @classmethod
     def localhost(cls) -> "NetworkConfig":
         return NetworkConfig(
-            chain_id="xion-testnet-1",
-            url="grpc+http://localhost:9090",
-            min_fee=0.025,
-            denom_fee="uxion",
-            denom_staking="uxion",
-            faucet_url=None,
+            chain_id=os.getenv("XION_LOCALHOST_CHAIN_ID", "xion-testnet-1"),
+            url=os.getenv("XION_LOCALHOST_RPC_URL", "grpc+http://localhost:9090"),
+            min_fee=os.getenv("XION_LOCALHOST_MIN_FEE", 0.025),
+            denom_fee=os.getenv("XION_LOCALHOST_DENOM_FEE", "uxion"),
+            denom_staking=os.getenv("XION_LOCALHOST_DENOM_STAKING", "uxion"),
+            faucet_url=os.getenv("XION_LOCALHOST_FAUCET_URL", None),
         )
 
     @classmethod
