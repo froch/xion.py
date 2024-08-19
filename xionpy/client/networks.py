@@ -15,11 +15,11 @@ URL_PREFIXES = (
 @dataclass
 class NetworkConfig:
     chain_id: str
-    fee_minimum_gas_price: Union[int, float]
-    fee_denomination: str
-    staking_denomination: str
+    denom_fee: str
+    denom_staking: str
+    faucet_url: Optional[str]
+    min_fee: Union[int, float]
     url: str
-    faucet_url: Optional[str] = None
 
     def validate(self):
         if self.chain_id == "":
@@ -27,10 +27,10 @@ class NetworkConfig:
         if self.url == "":
             raise NetworkConfigError("No RPC URL is set")
         if not any(
-                map(
-                    lambda x: self.url.startswith(x),
-                    URL_PREFIXES,
-                )
+            map(
+                lambda x: self.url.startswith(x),
+                URL_PREFIXES,
+            )
         ):
             prefix_list = ", ".join(map(lambda x: f'"{x}"', URL_PREFIXES))
             raise NetworkConfigError(
@@ -42,9 +42,9 @@ class NetworkConfig:
         return NetworkConfig(
             chain_id="xion-testnet-1",
             url="grpc+http://localhost:9090",
-            fee_minimum_gas_price=0.025,
-            fee_denomination="uxion",
-            staking_denomination="uxion",
+            min_fee=0.025,
+            denom_fee="uxion",
+            denom_staking="uxion",
             faucet_url=None,
         )
 
@@ -53,9 +53,9 @@ class NetworkConfig:
         return NetworkConfig(
             chain_id="xion-testnet-1",
             url="grpc+https://grpc.xion-testnet-1.burnt.com",
-            fee_minimum_gas_price=0.025,
-            fee_denomination="uxion",
-            staking_denomination="uxion",
+            min_fee=0.025,
+            denom_fee="uxion",
+            denom_staking="uxion",
             faucet_url=None,
         )
 
@@ -64,8 +64,8 @@ class NetworkConfig:
         return NetworkConfig(
             chain_id="xion-mainnet-1",
             url="grpc+https://grpc.xion-mainnet-1.burnt.com",
-            fee_minimum_gas_price=0.025,
-            fee_denomination="uxion",
-            staking_denomination="uxion",
+            min_fee=0.025,
+            denom_fee="uxion",
+            denom_staking="uxion",
             faucet_url=None,
         )

@@ -1,17 +1,18 @@
 import os
 
-from xionpy.client import XionClient, TxResponse
-from xionpy.client.config import NetworkConfig
+from xionpy.client import XionClient
+from xionpy.client.networks import NetworkConfig
 from xionpy.client.wallet import XionWallet
-from xionpy.mnemonic import generate_mnemonic
+from xionpy.crypto.mnemonic import generate_mnemonic
+from xionpy.services.txs.model import TxResponse
 
 
-def test_bank_balance():
+def test_bank_query_balances():
     m = os.getenv("XION_MNEMONIC", generate_mnemonic())
     wallet = XionWallet.from_mnemonic(m)
-    client = XionClient(NetworkConfig.localhost())
+    xion = XionClient(cfg=NetworkConfig.localhost())
 
-    balance = client.query_bank_balance(wallet.address())
+    balance = xion.bank.query_balances(wallet.address())
     assert balance is not None
     assert isinstance(balance, int)
     assert balance >= 0
@@ -21,11 +22,17 @@ def test_bank_send():
     wallet = XionWallet.from_mnemonic(m)
 
     network = NetworkConfig.localhost()
-    client = XionClient(network)
+    xion = XionClient(network)
 
     amount = 1_000_000
     memo = "🔥 xion.py"
-    tx = client.tx_bank_send(wallet.address(), amount, network.fee_denomination, wallet, memo)
+    tx = xion.tx_bank_send(
+        wallet,
+        wallet.address(),
+        amount,
+        network.denom_fee,
+        memo,
+    )
 
     assert tx is not None
     assert isinstance(tx, TxResponse)

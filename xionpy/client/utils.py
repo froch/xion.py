@@ -1,48 +1,7 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Union
 
-from xionpy.client.tx import SigningCfg, SubmittedTx
 from xionpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-
-
-def tx_submit_basic(
-        client: "LedgerClient",  # type: ignore # noqa: F821
-        tx: "Transaction",  # type: ignore # noqa: F821
-        sender: "Wallet",  # type: ignore # noqa: F821
-        account: Optional["Account"] = None,  # type: ignore # noqa: F821
-        gas_limit: Optional[int] = None,
-        memo: Optional[str] = None,
-) -> SubmittedTx:
-
-    if account is None:
-        account = client.query_account(sender.address())
-
-    if gas_limit is not None:
-        fee = client.estimate_fee_from_gas(gas_limit)
-    else:
-        fee = f"{client.network_config.fee_minimum_gas_price}{client.network_config.fee_denomination}"
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=client.gas_strategy.block_gas_limit(),
-            memo=memo,
-        )
-        tx.sign(sender.signer(), client.network_config.chain_id, account.number)
-        tx.complete()
-
-        gas_limit, fee = client.estimate_gas_and_fee_for_tx(tx)
-
-    # finally, build the final transaction that will be executed with the correct gas and fee values
-    tx.seal(
-        SigningCfg.direct(sender.public_key(), account.sequence),
-        fee=fee,
-        gas_limit=gas_limit,
-        memo=memo,
-    )
-    tx.sign(sender.signer(), client.network_config.chain_id, account.number)
-    tx.complete()
-
-    return client.broadcast_tx(tx)
 
 
 def ensure_timedelta(interval: Union[int, float, timedelta]) -> timedelta:

@@ -6,7 +6,10 @@ from typing import List, Optional, Tuple
 
 from xionpy.crypto.hashfuncs import sha256
 from xionpy.crypto.keypairs import PrivateKey
-from xionpy.mnemonic.words import ENGLISH_MNEMONIC_WORDS, ENGLISH_MNEMONIC_WORDS_LIST
+from xionpy.crypto.mnemonic.words import (
+    ENGLISH_MNEMONIC_WORDS,
+    ENGLISH_MNEMONIC_WORDS_LIST,
+)
 
 
 SEED_MIN_BYTE_LEN = 16

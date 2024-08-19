@@ -3,7 +3,7 @@ import os
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
-from xionpy.client.tx import Transaction
+from xionpy.services.txs.model import Transaction
 
 
 class GasStrategy(ABC):
@@ -28,7 +28,6 @@ class GasStrategy(ABC):
         block_limit = self.block_gas_limit()
         if block_limit < 0:
             return value
-
         return min(value, block_limit)
 
 
@@ -38,21 +37,21 @@ class SimulationGasStrategy(GasStrategy):
     DEFAULT_MARGIN = os.getenv("XION_GAS_ADJUSTMENT_MARGIN", 6000)
 
     def __init__(self, client: "XionClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
-        self._client = client
-        self._max_gas: Optional[int] = None
-        self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
+        self.client = client
+        self.max_gas: Optional[int] = None
+        self.multiplier = multiplier or self.DEFAULT_MULTIPLIER
 
     def estimate_gas(self, tx: Transaction) -> int:
-        gas_estimate = self._client.simulate_tx(tx) + self.DEFAULT_MARGIN
-        gas_adjusted = math.ceil(gas_estimate * self._multiplier)
+        gas_estimate = self.client.txs.simulate(tx) + self.DEFAULT_MARGIN
+        gas_adjusted = math.ceil(gas_estimate * self.multiplier)
         return self._clip_gas(gas_adjusted)
 
     def block_gas_limit(self) -> int:
-        if self._max_gas is None:
-            # TODO(froch, 20240818): this subspace doesn't exist
+        if self.max_gas is None:
+            # TODO(froch, 20240818): this subspace doesn't exist on XION
             # block_params = self._client.query_params("baseapp", "BlockParams")
-            self._max_gas = 250_000
-        return self._max_gas or -1
+            self.max_gas = 250_000
+        return self.max_gas or -1
 
 
 class OfflineMessageTableStrategy(GasStrategy):

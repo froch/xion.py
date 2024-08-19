@@ -4,8 +4,6 @@ from typing import Any, Dict, List
 
 from google.protobuf.json_format import Parse, ParseDict
 
-from xionpy.common.rest_client import RestClient
-from xionpy.common.utils import json_encode
 from xionpy.protos.cosmos.crypto.secp256k1.keys_pb2 import (  # noqa: F401  # pylint: disable=unused-import
     PubKey as ProtoPubKey,
 )
@@ -24,32 +22,23 @@ from xionpy.protos.cosmwasm.wasm.v1.tx_pb2 import (  # noqa: F401  # pylint: dis
     MsgInstantiateContract,
     MsgStoreCode,
 )
-from xionpy.tx.interface import TxInterface
+from xionpy.services.rest import XionBaseRestClient
+from xionpy.services.txs.interface import TxInterface
+from xionpy.services.utils import json_encode
 
 
-# Unused imports are required to make sure that related types get generated - Parse and ParseDict fail without them
+# Unused imports are required to make sure that related types get generated
+# Parse and ParseDict fail without them
 
 
-class TxRestClient(TxInterface):
-    """Tx REST client."""
+class TxsRestClient(TxInterface):
 
     API_URL = "/cosmos/tx/v1beta1"
 
-    def __init__(self, rest_client: RestClient) -> None:
-        """
-        Create a Tx rest client.
-
-        :param rest_client: RestClient api
-        """
+    def __init__(self, rest_client: XionBaseRestClient) -> None:
         self.rest_client = rest_client
 
     def Simulate(self, request: SimulateRequest) -> SimulateResponse:
-        """
-        Simulate executing a transaction to estimate gas usage.
-
-        :param request: SimulateRequest
-        :return: SimulateResponse
-        """
         response = self.rest_client.post(
             f"{self.API_URL}/simulate",
             request,
@@ -57,12 +46,6 @@ class TxRestClient(TxInterface):
         return Parse(response, SimulateResponse())
 
     def GetTx(self, request: GetTxRequest) -> GetTxResponse:
-        """
-        GetTx fetches a tx by hash.
-
-        :param request: GetTxRequest
-        :return: GetTxResponse
-        """
         response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
 
         # JSON in case of CosmWasm messages workaround
@@ -73,22 +56,10 @@ class TxRestClient(TxInterface):
         return ParseDict(dict_response, GetTxResponse())
 
     def BroadcastTx(self, request: BroadcastTxRequest) -> BroadcastTxResponse:
-        """
-        BroadcastTx broadcast transaction.
-
-        :param request: BroadcastTxRequest
-        :return: BroadcastTxResponse
-        """
         response = self.rest_client.post(f"{self.API_URL}/txs", request)
         return Parse(response, BroadcastTxResponse())
 
     def GetTxsEvent(self, request: GetTxsEventRequest) -> GetTxsEventResponse:
-        """
-        GetTxsEvent fetches txs by event.
-
-        :param request: GetTxsEventRequest
-        :return: GetTxsEventResponse
-        """
         response = self.rest_client.get(f"{self.API_URL}/txs", request)
 
         # JSON in case of CosmWasm messages workaround
@@ -105,7 +76,6 @@ class TxRestClient(TxInterface):
     def _fix_messages(messages: List[Dict[str, Any]]):
         """
         Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string.
-
         :param messages: List of message in Tx response
         """
         for message in messages:

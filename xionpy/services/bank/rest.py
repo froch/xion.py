@@ -1,7 +1,5 @@
 from google.protobuf.json_format import Parse
 
-from xionpy.bank.interface import Bank
-from xionpy.common.rest_client import RestClient
 from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
@@ -18,6 +16,8 @@ from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryTotalSupplyRequest,
     QueryTotalSupplyResponse,
 )
+from xionpy.services.bank.interface import Bank
+from xionpy.services.rest import XionBaseRestClient
 
 
 class BankRestClient(Bank):
@@ -25,7 +25,7 @@ class BankRestClient(Bank):
 
     API_URL = "/cosmos/bank/v1beta1"
 
-    def __init__(self, rest_api: RestClient):
+    def __init__(self, rest_api: XionBaseRestClient):
         """
         Create bank rest client.
 

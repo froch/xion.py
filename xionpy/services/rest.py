@@ -8,7 +8,7 @@ from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import Message
 
 
-class RestClient:
+class XionBaseRestClient:
 
     def __init__(self, rest_address: str):
         self._session = requests.session()

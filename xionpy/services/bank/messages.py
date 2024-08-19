@@ -9,7 +9,6 @@ def msg_send(
         amount: int,
         denom: str
 ) -> MsgSend:
-
     msg = MsgSend(
         from_address=str(from_address),
         to_address=str(to_address),
