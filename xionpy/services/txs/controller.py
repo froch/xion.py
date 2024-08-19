@@ -45,6 +45,7 @@ class XionTxsController(XionBaseController):
 
         self.gas_strategy = gas_strategy
         self.auth = auth
+        self.memo = "🔥 burnt-labs/xion.py"
 
         if isinstance(self.binding, grpc.Channel):
             self.client = TxsGrpcClient(self.binding)
@@ -85,6 +86,9 @@ class XionTxsController(XionBaseController):
 
         if account is None:
             account = self.auth.query_account(sender.address())
+
+        if memo is None:
+            memo = self.memo
 
         # estimate the fee for a provided gas limit
         if gas_limit is not None:

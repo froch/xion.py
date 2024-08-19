@@ -24,7 +24,6 @@ def test_bank_send():
     network = NetworkConfig.localhost()
     xion = XionClient(network)
     amount = 1_000_000
-    memo = "🔥 xion.py"
 
     draft_tx = xion.bank.tx_send(
         sender=wallet.address(),
@@ -36,7 +35,6 @@ def test_bank_send():
     tx = xion.txs.submit(
         tx=draft_tx,
         sender=wallet,
-        memo=memo,
     )
 
     assert tx is not None

@@ -1,6 +1,6 @@
-from xionpy.client.coin import Coin
+from xionpy.client.coins import Coin
 from xionpy.crypto.address import Address
-from xionpy.protos.cosmos.staking.v1beta1.staking_pb2 import (
+from xionpy.protos.cosmos.staking.v1beta1.tx_pb2 import (
     MsgBeginRedelegate,
     MsgDelegate,
     MsgUndelegate,

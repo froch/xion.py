@@ -9,8 +9,10 @@ from xionpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
 )
 from xionpy.services.controller import XionBaseController
+from xionpy.services.staking.messages import msg_delegate
 from xionpy.services.staking.model import Validator, ValidatorStatus
 from xionpy.services.staking.rest import StakingRestClient
+from xionpy.services.txs.model import Transaction
 
 
 class XionStakingController(XionBaseController):
@@ -25,8 +27,8 @@ class XionStakingController(XionBaseController):
     def query_validators(
             self, status: Optional[ValidatorStatus] = None
     ) -> List[Validator]:
-        filtered_status = status or ValidatorStatus.BONDED
 
+        filtered_status = status or ValidatorStatus.BONDED
         req = QueryValidatorsRequest()
         if filtered_status != ValidatorStatus.UNSPECIFIED:
             req.status = filtered_status.value
@@ -44,3 +46,18 @@ class XionStakingController(XionBaseController):
                 )
             )
         return validators
+
+    def tx_delegate(
+            self, delegator: Address, validator: Address, amount: int, denom:str
+    ) -> Transaction:
+
+        tx = Transaction()
+        tx.add_message(
+            msg_delegate(
+                delegator=delegator,
+                validator=validator,
+                amount=amount,
+                denom=denom,
+            )
+        )
+        return tx

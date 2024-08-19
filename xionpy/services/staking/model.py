@@ -14,12 +14,6 @@ class ValidatorStatus(Enum):
 
     @classmethod
     def from_proto(cls, value: int) -> "ValidatorStatus":
-        """Get the validator status from proto.
-
-        :param value: value
-        :raises RuntimeError: Unable to decode validator status
-        :return: Validator status
-        """
         if value == 0:
             return cls.UNSPECIFIED
         if value == 1:

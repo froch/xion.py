@@ -46,8 +46,7 @@ buf-gen:
 	@buf build
 	@buf generate
 
-fetch_proto_src: $(COSMOS_PROTO_DIR)
-#fetch_proto_src: $(COSMOS_GOGO_PROTO_DIR) $(COSMOS_PROTO_DIR) $(COSMOS_SDK_DIR) $(GOOGLE_API_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
+fetch_proto_src: $(COSMOS_GOGO_PROTO_DIR) $(COSMOS_PROTO_DIR) $(COSMOS_SDK_DIR) $(GOOGLE_API_DIR) $(IBC_GO_DIR) $(WASMD_DIR) $(XIOND_DIR)
 
 $(COSMOS_GOGO_PROTO_DIR): Makefile
 	rm -rfv $(COSMOS_GOGO_PROTO_DIR)
