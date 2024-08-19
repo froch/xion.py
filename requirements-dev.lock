@@ -10,6 +10,8 @@
 #   universal: false
 
 -e file:.
+annotated-types==0.7.0
+    # via pydantic
 backoff==2.2.1
     # via xionpy
 bandit==1.7.9
@@ -42,6 +44,10 @@ protobuf==5.27.3
     # via xionpy
 pycryptodome==3.20.0
     # via xionpy
+pydantic==2.8.2
+    # via xionpy
+pydantic-core==2.20.1
+    # via pydantic
 pygments==2.18.0
     # via rich
 pytest==8.3.2
@@ -59,5 +65,8 @@ six==1.16.0
     # via python-dateutil
 stevedore==5.2.0
     # via bandit
+typing-extensions==4.12.2
+    # via pydantic
+    # via pydantic-core
 urllib3==2.2.2
     # via requests

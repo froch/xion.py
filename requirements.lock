@@ -10,6 +10,8 @@
 #   universal: false
 
 -e file:.
+annotated-types==0.7.0
+    # via pydantic
 backoff==2.2.1
     # via xionpy
 bech32==1.2.0
@@ -28,6 +30,10 @@ protobuf==5.27.3
     # via xionpy
 pycryptodome==3.20.0
     # via xionpy
+pydantic==2.8.2
+    # via xionpy
+pydantic-core==2.20.1
+    # via pydantic
 python-dateutil==2.9.0.post0
     # via xionpy
 requests==2.32.3
@@ -35,5 +41,8 @@ requests==2.32.3
 six==1.16.0
     # via ecdsa
     # via python-dateutil
+typing-extensions==4.12.2
+    # via pydantic
+    # via pydantic-core
 urllib3==2.2.2
     # via requests
