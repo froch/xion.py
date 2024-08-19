@@ -125,6 +125,7 @@ order_by_type = true
 case_sensitive = true
 lines_after_imports = 2
 skip = [
+    "build",
     "xionpy/protos",
     ".venv",
 ]

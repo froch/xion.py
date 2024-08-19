@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from xionpy.client.coins import parse_coins
 from xionpy.client.exceptions import (
     BroadcastError,
     InsufficientFeesError,
@@ -28,6 +27,7 @@ from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+from xionpy.services.base.utils import parse_coins_proto
 
 
 class TxState(Enum):
@@ -148,7 +148,7 @@ class Transaction:
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit),
+            fee=Fee(amount=parse_coins_proto(fee), gas_limit=gas_limit),
         )
 
         self._fee = fee

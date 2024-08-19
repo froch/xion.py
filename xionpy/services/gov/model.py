@@ -19,7 +19,7 @@ class ProposalStatus(Enum):
     FAILED = "PROPOSAL_STATUS_FAILED"
 
     @classmethod
-    def from_proto(cls, value: int) -> "ValidatorStatus":
+    def from_proto(cls, value: int) -> "ProposalStatus":
         if value == 0:
             return cls.UNSPECIFIED
         if value == 1:

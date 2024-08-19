@@ -4,7 +4,7 @@ from typing import List
 from xionpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
-def parse_coins(value: str) -> List[Coin]:
+def parse_coins_proto(value: str) -> List[Coin]:
 
     coins = []
 
