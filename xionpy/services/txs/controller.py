@@ -13,6 +13,9 @@ from xionpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     GetTxRequest,
     SimulateRequest,
 )
+from xionpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import (
+    ServiceStub as TxsGrpcClient,
+)
 from xionpy.services.controller import XionBaseController
 from xionpy.services.txs.gas import GasStrategy
 from xionpy.services.txs.model import (
@@ -22,7 +25,6 @@ from xionpy.services.txs.model import (
     TxResponse,
     TxState,
 )
-from xionpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxsGrpcClient
 from xionpy.services.txs.rest import TxsRestClient
 
 

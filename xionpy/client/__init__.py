@@ -5,6 +5,7 @@ from xionpy.client.wallet import Wallet
 from xionpy.crypto.address import Address
 from xionpy.services.auth.controller import XionAuthController
 from xionpy.services.bank.controller import XionBankController
+from xionpy.services.staking.controller import XionStakingController
 from xionpy.services.txs.controller import XionTxsController
 from xionpy.services.txs.gas import GasStrategy, SimulationGasStrategy
 from xionpy.services.txs.model import SigningCfg, SubmittedTx, TxResponse
@@ -23,6 +24,7 @@ class XionClient:
 
         self.auth = XionAuthController(cfg)
         self.bank = XionBankController(cfg)
+        self.staking = XionStakingController(cfg)
         self.txs = XionTxsController(cfg, self.gas_strategy)
 
     def tx_bank_send(
