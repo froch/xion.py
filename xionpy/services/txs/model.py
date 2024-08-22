@@ -14,8 +14,8 @@ from xionpy.client.exceptions import (
     OutOfGasError,
 )
 from xionpy.crypto.address import Address
-from xionpy.crypto.interface import Signer
-from xionpy.crypto.keypairs import PublicKey
+from xionpy.services.crypto.interface import Signer
+from xionpy.services.crypto.secp256k1.model import PublicKey
 from xionpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from xionpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
@@ -27,7 +27,7 @@ from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from xionpy.services.base.utils import parse_coins_proto
+from xionpy.services.base.coin.model import Coin
 
 
 class TxState(Enum):
@@ -148,7 +148,7 @@ class Transaction:
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=Fee(amount=parse_coins_proto(fee), gas_limit=gas_limit),
+            fee=Fee(amount=Coin.from_list(fee), gas_limit=gas_limit),
         )
 
         self._fee = fee

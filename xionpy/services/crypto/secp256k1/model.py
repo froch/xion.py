@@ -6,7 +6,7 @@ import ecdsa
 from ecdsa.curves import Curve
 from ecdsa.util import sigencode_string, sigencode_string_canonize
 
-from xionpy.crypto.interface import Signer
+from xionpy.services.crypto.interface import Signer
 
 
 def _base64_decode(value: str) -> bytes:
@@ -17,11 +17,13 @@ def _base64_decode(value: str) -> bytes:
 
 
 class PublicKey:
-
     curve: Curve = ecdsa.SECP256k1
     hash_function: Callable = hashlib.sha256
 
-    def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
+    def __init__(  # noqa
+            self,
+            public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]
+    ):
         if isinstance(public_key, bytes):
             self._verifying_key = ecdsa.VerifyingKey.from_string(
                 public_key, curve=self.curve, hashfunc=self.hash_function
@@ -72,7 +74,6 @@ class PublicKey:
 
 
 class PrivateKey(Signer):
-
     curve: Curve = ecdsa.SECP256k1
     hash_function: Callable = hashlib.sha256
 
@@ -115,7 +116,7 @@ class PrivateKey(Signer):
         return PublicKey(self._signing_key.get_verifying_key())
 
     def sign(
-        self, message: bytes, deterministic: bool = True, canonicalise: bool = True
+            self, message: bytes, deterministic: bool = True, canonicalise: bool = True
     ) -> bytes:
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
         sign_fnc = (
@@ -127,7 +128,7 @@ class PrivateKey(Signer):
         return sign_fnc(message, sigencode=sigencode)
 
     def sign_digest(
-        self, digest: bytes, deterministic=True, canonicalise: bool = True
+            self, digest: bytes, deterministic=True, canonicalise: bool = True
     ) -> bytes:
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
         sign_fnc = (

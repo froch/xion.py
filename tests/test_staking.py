@@ -15,6 +15,24 @@ def test_staking_query_validators():
     assert isinstance(validators, list)
     assert len(validators) > 0
 
+
+def test_query_validator_by_moniker():
+    xion = XionClient(cfg=NetworkConfig.localhost())
+    moniker = "ahi"
+    validator = xion.staking.query_validator_by_moniker("ahi")
+    assert validator is not None
+    assert moniker in validator.moniker
+
+def test_query_validator_by_address():
+    xion = XionClient(cfg=NetworkConfig.localhost())
+    moniker = "ahi"
+    validator = xion.staking.query_validator_by_moniker(moniker)
+    address = str(validator.address)
+    validator = xion.staking.query_validator_by_address(address)
+    assert validator is not None
+    assert validator.address == address
+
+
 def test_staking_tx_delegate():
     m = os.getenv("XION_MNEMONIC", generate_mnemonic())
     wallet = XionWallet.from_mnemonic(m)

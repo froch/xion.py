@@ -8,6 +8,9 @@ from xionpy.services.rest import XionBaseRestClient
 
 
 class XionBaseController:
+    """
+    Base class for all XION module controllers
+    """
 
     def __init__(
             self,

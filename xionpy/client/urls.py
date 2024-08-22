@@ -17,10 +17,6 @@ class ParsedUrl:
 
     @property
     def host_and_port(self) -> str:
-        """Get the host and port of the url.
-
-        :return: host and port
-        """
         return f"{self.hostname}:{self.port}"
 
     @property

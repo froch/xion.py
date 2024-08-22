@@ -9,6 +9,9 @@ from google.protobuf.message import Message
 
 
 class XionBaseRestClient:
+    """
+    Base class for all XION REST clients
+    """
 
     def __init__(self, rest_address: str):
         self._session = requests.session()

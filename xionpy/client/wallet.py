@@ -5,7 +5,7 @@ from typing import Optional
 from xionpy.crypto.address import Address
 from xionpy.crypto.hashfuncs import sha256
 from xionpy.crypto.interface import Signer
-from xionpy.crypto.keypairs import PrivateKey, PublicKey
+from xionpy.services.crypto.secp256k1.model import PrivateKey, PublicKey
 from xionpy.crypto.mnemonic import COSMOS_HD_PATH, derive_child_key_from_mnemonic
 
 

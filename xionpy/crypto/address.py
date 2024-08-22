@@ -4,7 +4,7 @@ from typing import Optional, Union
 import bech32
 
 from xionpy.crypto.hashfuncs import ripemd160, sha256
-from xionpy.crypto.keypairs import PublicKey
+from xionpy.services.crypto.secp256k1.model import PublicKey
 
 
 DEFAULT_PREFIX = "xion"
@@ -19,19 +19,11 @@ def _to_bech32(prefix: str, data: bytes) -> str:
 
 class Address(UserString):
 
-    def __init__(
+    def __init__( # noqa
             self,
             value: Union[str, bytes, PublicKey, "Address"],
             prefix: Optional[str] = None,
     ):
-        """Initialize Address instance.
-
-        :param value: str, byte, public key or Address another instance
-        :param prefix: optional string
-        :raises RuntimeError: Unable to parse address
-        :raises RuntimeError: Incorrect address length
-        :raises TypeError: Unexpected type of `value` parameter
-        """
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
@@ -66,16 +58,14 @@ class Address(UserString):
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
     def __str__(self):
-        """String representation of the address."""  # noqa: D401
+        # noqa: D401
         return self._display
 
     def __bytes__(self):
-        """bytes representation of the address."""
         return self._address
 
     @property
     def data(self):  # noqa:
-        """Return address in string."""
         return str(self)
 
     def __json__(self):  # noqa:

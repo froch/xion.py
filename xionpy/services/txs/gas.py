@@ -32,7 +32,6 @@ class GasStrategy(ABC):
 
 
 class SimulationGasStrategy(GasStrategy):
-
     DEFAULT_MULTIPLIER = os.getenv("XION_GAS_ADJUSTMENT", 1.4)
     DEFAULT_MARGIN = os.getenv("XION_GAS_ADJUSTMENT_MARGIN", 6000)
 
@@ -55,7 +54,6 @@ class SimulationGasStrategy(GasStrategy):
 
 
 class OfflineMessageTableStrategy(GasStrategy):
-
     DEFAULT_FALLBACK_GAS_LIMIT = 250_000
     DEFAULT_BLOCK_LIMIT = 1_000_000
 
@@ -69,9 +67,9 @@ class OfflineMessageTableStrategy(GasStrategy):
         return strategy
 
     def __init__(
-        self,
-        fallback_gas_limit: Optional[int] = None,
-        block_limit: Optional[int] = None,
+            self,
+            fallback_gas_limit: Optional[int] = None,
+            block_limit: Optional[int] = None,
     ):
         self._table: Dict[str, int] = {}
         self._block_limit = block_limit or self.DEFAULT_BLOCK_LIMIT
