@@ -1,5 +1,6 @@
 import grpc
 
+from xionpy.client import XionWallet
 from xionpy.client.networks import NetworkConfig
 from xionpy.crypto.address import Address
 from xionpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -12,8 +13,8 @@ from xionpy.services.controller import XionBaseController
 
 class XionAuthController(XionBaseController):
 
-    def __init__(self, cfg: NetworkConfig):
-        super().__init__(cfg)
+    def __init__(self, cfg: NetworkConfig, wallet: XionWallet):
+        super().__init__(cfg, wallet)
         if isinstance(self.binding, grpc.Channel):
             self.client = AuthGrpcClient(self.binding)
         else:

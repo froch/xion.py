@@ -7,10 +7,18 @@ from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceResponse,
     QueryDenomMetadataRequest,
     QueryDenomMetadataResponse,
+    QueryDenomOwnersRequest,
+    QueryDenomOwnersResponse,
     QueryDenomsMetadataRequest,
     QueryDenomsMetadataResponse,
     QueryParamsRequest,
     QueryParamsResponse,
+    QuerySendEnabledRequest,
+    QuerySendEnabledResponse,
+    QuerySpendableBalanceByDenomRequest,
+    QuerySpendableBalanceByDenomResponse,
+    QuerySpendableBalancesRequest,
+    QuerySpendableBalancesResponse,
     QuerySupplyOfRequest,
     QuerySupplyOfResponse,
     QueryTotalSupplyRequest,
@@ -23,74 +31,56 @@ class Bank(ABC):
 
     @abstractmethod
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
-        """
-        Query balance of selected denomination from specific account.
-
-        :param request: QueryBalanceRequest with address and denomination
-
-        :return: QueryBalanceResponse
-        """
+        pass
 
     @abstractmethod
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
-        """
-        Query balance of all denominations from specific account.
-
-        :param request: QueryAllBalancesRequest with account address
-
-        :return: QueryAllBalancesResponse
-        """
+        pass
 
     @abstractmethod
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
-        """
-        Query total supply of all denominations.
-
-        :param request: QueryTotalSupplyRequest
-
-        :return: QueryTotalSupplyResponse
-        """
+        pass
 
     @abstractmethod
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
-        """
-        Query total supply of specific denomination.
-
-        :param request: QuerySupplyOfRequest with denomination
-
-        :return: QuerySupplyOfResponse
-        """
+        pass
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        """
-        Query the parameters of bank module.
-
-        :param request: QueryParamsRequest
-
-        :return: QueryParamsResponse
-        """
+        pass
 
     @abstractmethod
     def DenomMetadata(
-        self, request: QueryDenomMetadataRequest
+            self, request: QueryDenomMetadataRequest
     ) -> QueryDenomMetadataResponse:
-        """
-        Query the client metadata for all registered coin denominations.
-
-        :param request: QueryDenomMetadataRequest with denomination
-
-        :return: QueryDenomMetadataResponse
-        """
+        pass
 
     @abstractmethod
     def DenomsMetadata(
-        self, request: QueryDenomsMetadataRequest
+            self, request: QueryDenomsMetadataRequest
     ) -> QueryDenomsMetadataResponse:
-        """
-        Query the client metadata of a given coin denomination.
+        pass
 
-        :param request: QueryDenomsMetadataRequest
+    @abstractmethod
+    def DenomOwners(
+            self, request: QueryDenomOwnersRequest
+    ) -> QueryDenomOwnersResponse:
+        pass
 
-        :return: QueryDenomsMetadataResponse
-        """
+    @abstractmethod
+    def SendEnabled(
+            self, request: QuerySendEnabledRequest
+    ) -> QuerySendEnabledResponse:
+        pass
+
+    @abstractmethod
+    def SpendableBalanceByDenom(
+            self, request: QuerySpendableBalanceByDenomRequest
+    ) -> QuerySpendableBalanceByDenomResponse:
+        pass
+
+    @abstractmethod
+    def SpendableBalances(
+            self, request: QuerySpendableBalancesRequest
+    ) -> QuerySpendableBalancesResponse:
+        pass

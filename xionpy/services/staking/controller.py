@@ -2,6 +2,7 @@ from typing import List, Optional
 
 import grpc
 
+from xionpy.client import XionWallet
 from xionpy.client.exceptions import NotFoundError
 from xionpy.client.networks import NetworkConfig
 from xionpy.crypto.address import Address
@@ -21,8 +22,8 @@ from xionpy.services.txs.model import Transaction
 
 class XionStakingController(XionBaseController):
 
-    def __init__(self, cfg: NetworkConfig):
-        super().__init__(cfg)
+    def __init__(self, cfg: NetworkConfig, wallet: XionWallet):
+        super().__init__(cfg, wallet)
         if isinstance(self.binding, grpc.Channel):
             self.client = StakingGrpcClient(self.binding)
         else:

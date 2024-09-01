@@ -2,6 +2,7 @@ from typing import List
 
 import grpc
 
+from xionpy.client import XionWallet
 from xionpy.client.networks import NetworkConfig
 from xionpy.protos.cosmos.gov.v1.query_pb2 import QueryProposalsRequest
 from xionpy.protos.cosmos.gov.v1.query_pb2_grpc import QueryStub as GovGrpcClient
@@ -12,8 +13,8 @@ from xionpy.services.gov.rest import GovRestClient
 
 class XionGovController(XionBaseController):
 
-    def __init__(self, cfg: NetworkConfig):
-        super().__init__(cfg)
+    def __init__(self, cfg: NetworkConfig, wallet: XionWallet):
+        super().__init__(cfg, wallet)
         if isinstance(self.binding, grpc.Channel):
             self.client = GovGrpcClient(self.binding)
         else:

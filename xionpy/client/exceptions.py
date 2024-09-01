@@ -2,16 +2,8 @@ class NetworkConfigError(Exception):
     """Invalid Network Config."""
 
 
-class QueryError(Exception):
-    """Invalid Query Error."""
-
-
 class NotFoundError(Exception):
     """Not found Error."""
-
-
-class QueryTimeoutError(Exception):
-    """Query timeout Error."""
 
 
 class BroadcastError(Exception):

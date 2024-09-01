@@ -40,7 +40,7 @@ pbr==6.0.0
     # via stevedore
 pluggy==1.5.0
     # via pytest
-protobuf==5.27.3
+protobuf==5.28.0
     # via xionpy
 pycryptodome==3.20.0
     # via xionpy
@@ -53,6 +53,7 @@ pygments==2.18.0
 pytest==8.3.2
 python-dateutil==2.9.0.post0
     # via xionpy
+python-dotenv==1.0.1
 pyyaml==6.0.2
     # via bandit
 requests==2.32.3

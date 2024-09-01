@@ -53,7 +53,7 @@ class NetworkConfig:
     def xion_testnet_1(cls) -> "NetworkConfig":
         return NetworkConfig(
             chain_id="xion-testnet-1",
-            url="grpc+https://grpc.xion-testnet-1.burnt.com",
+            url="grpc+https://testnet-burnt-grpc.lavenderfive.com",
             min_fee=0.025,
             denom_fee="uxion",
             denom_staking="uxion",

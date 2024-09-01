@@ -7,10 +7,18 @@ from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceResponse,
     QueryDenomMetadataRequest,
     QueryDenomMetadataResponse,
+    QueryDenomOwnersRequest,
+    QueryDenomOwnersResponse,
     QueryDenomsMetadataRequest,
     QueryDenomsMetadataResponse,
     QueryParamsRequest,
     QueryParamsResponse,
+    QuerySendEnabledRequest,
+    QuerySendEnabledResponse,
+    QuerySpendableBalanceByDenomRequest,
+    QuerySpendableBalanceByDenomResponse,
+    QuerySpendableBalancesRequest,
+    QuerySpendableBalancesResponse,
     QuerySupplyOfRequest,
     QuerySupplyOfResponse,
     QueryTotalSupplyRequest,
@@ -46,7 +54,7 @@ class BankRestClient(Bank):
         return Parse(response, QueryTotalSupplyResponse())
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
-        response = self._rest_api.get(f"{self.API_URL}/supply/{request.denom}")
+        response = self._rest_api.get(f"{self.API_URL}/supply/by_denom?denom={request.denom}")
         return Parse(response, QuerySupplyOfResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -54,13 +62,43 @@ class BankRestClient(Bank):
         return Parse(response, QueryParamsResponse())
 
     def DenomMetadata(
-        self, request: QueryDenomMetadataRequest
+            self, request: QueryDenomMetadataRequest
     ) -> QueryDenomMetadataResponse:
         response = self._rest_api.get(f"{self.API_URL}/denoms_metadata/{request.denom}")
         return Parse(response, QueryDenomMetadataResponse())
 
     def DenomsMetadata(
-        self, request: QueryDenomsMetadataRequest
+            self, request: QueryDenomsMetadataRequest
     ) -> QueryDenomsMetadataResponse:
         response = self._rest_api.get(f"{self.API_URL}/denoms_metadata", request)
         return Parse(response, QueryDenomsMetadataResponse())
+
+    def DenomOwners(
+            self, request: QueryDenomOwnersRequest
+    ) -> QueryDenomOwnersResponse:
+        response = self._rest_api.get(f"{self.API_URL}/denom_owners/{request.denom}")
+        return Parse(response, QueryDenomOwnersResponse())
+
+    def SendEnabled(
+            self, request: QuerySendEnabledRequest
+    ) -> QuerySendEnabledResponse:
+        response = self._rest_api.get(f"{self.API_URL}/send_enabled")
+        return Parse(response, QuerySendEnabledResponse())
+
+    def SpendableBalanceByDenom(
+            self, request: QuerySpendableBalanceByDenomRequest
+    ) -> QuerySpendableBalanceByDenomResponse:
+        response = self._rest_api.get(
+            f"{self.API_URL}/spendable_balances/{request.address}/by_denom?denom={request.denom}",
+            request,
+            ["address", "denom"],
+        )
+        return Parse(response, QuerySpendableBalanceByDenomResponse())
+
+    def SpendableBalances(
+            self, request: QuerySpendableBalancesRequest
+    ) -> QuerySpendableBalancesResponse:
+        response = self._rest_api.get(
+            f"{self.API_URL}/spendable_balances/{request.address}", request, ["address"]
+        )
+        return Parse(response, QuerySpendableBalancesResponse())

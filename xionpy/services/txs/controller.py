@@ -38,10 +38,11 @@ class XionTxsController(XionBaseController):
     def __init__(
             self,
             cfg: NetworkConfig,
+            wallet: "XionWallet",  # type: ignore # noqa: F821
             gas_strategy: GasStrategy,
             auth: "XionAuthController",  # type: ignore # noqa: F821
      ):
-        super().__init__(cfg)
+        super().__init__(cfg, wallet)
 
         self.gas_strategy = gas_strategy
         self.auth = auth

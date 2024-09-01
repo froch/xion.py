@@ -2,6 +2,7 @@
 import certifi
 import grpc
 
+from xionpy.client import XionWallet
 from xionpy.client.networks import NetworkConfig
 from xionpy.client.urls import Protocol, parse_url
 from xionpy.services.rest import XionBaseRestClient
@@ -13,13 +14,15 @@ class XionBaseController:
     """
 
     def __init__(
-            self,
-             cfg: NetworkConfig = NetworkConfig.localhost(),
+        self,
+        cfg: NetworkConfig = NetworkConfig.localhost(),
+        wallet: XionWallet = None,
     ):
 
         self.cfg = cfg
-        parsed_url = parse_url(self.cfg.url)
+        self.wallet = wallet
 
+        parsed_url = parse_url(self.cfg.url)
         if parsed_url.protocol == Protocol.GRPC:
             if parsed_url.secure:
                 with open(certifi.where(), "rb") as f:
