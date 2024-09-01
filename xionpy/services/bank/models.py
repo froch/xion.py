@@ -2,10 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-
-class CoinModel(BaseModel):
-    denom: str
-    amount: str
+from xionpy.services.base.coin.model import CoinModel
 
 
 class SendAuthorizationModel(BaseModel):

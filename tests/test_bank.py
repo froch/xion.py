@@ -1,9 +1,12 @@
 from xionpy.services.bank.models import (
     CoinModel,
     DenomOwnerModel,
+    InputModel,
     MetadataModel,
+    OutputModel,
     SendEnabledModel,
 )
+from xionpy.services.txs.model import TxResponse
 
 
 def test_bank_query_balances(xion):
@@ -47,7 +50,7 @@ def test_bank_query_supply_of(xion):
     assert r is not None
     assert r.amount is not None
     assert r.amount.denom == denom
-    assert int(r.amount.amount) > 0
+    assert r.amount.amount > 0
 
 
 def test_bank_query_params(xion):
@@ -62,7 +65,7 @@ def test_bank_query_spendable_balance_by_denom(xion):
     assert r is not None
     assert r.balance is not None
     assert r.balance.denom == denom
-    assert int(r.balance.amount) >= 0
+    assert r.balance.amount >= 0
 
 
 def test_bank_query_spendable_balances(xion):
@@ -85,3 +88,62 @@ def test_bank_query_send_enabled(xion):
     assert r is not None
     assert len(r.send_enabled) > 0
     assert all(isinstance(se, SendEnabledModel) for se in r.send_enabled)
+
+
+def test_tx_bank_send(xion):
+    amount = 1_000_000
+
+    # send to self
+    draft_tx = xion.bank.tx_bank_send(
+        sender=xion.wallet.address(),
+        recipient=xion.wallet.address(),
+        amount=amount,
+        denom=xion.cfg.denom_fee
+    )
+
+    tx = xion.txs.submit(
+        tx=draft_tx
+    )
+
+    assert tx is not None
+    assert isinstance(tx, TxResponse)
+    assert tx.hash is not None
+    assert tx.code == 0
+
+
+def test_tx_bank_multi_send(xion):
+    in_amount = 1_000_000
+    out_amount = in_amount / 2
+
+    inputs = [
+        # send 1 XION in
+        InputModel(
+            address=str(xion.wallet.address()),
+            coins=[CoinModel(denom=xion.cfg.denom_fee, amount=in_amount)]
+        )
+    ]
+    outputs = [
+        # take 0.5 XION out each
+        OutputModel(
+            address=str(xion.wallet.address()),
+            coins=[CoinModel(denom=xion.cfg.denom_fee, amount=out_amount)]
+        ),
+        OutputModel(
+            address=str(xion.wallet.address()),
+            coins=[CoinModel(denom=xion.cfg.denom_fee, amount=out_amount)]
+        )
+    ]
+
+    draft_tx = xion.bank.tx_bank_multi_send(
+        inputs=inputs,
+        outputs=outputs,
+    )
+
+    tx = xion.txs.submit(
+        tx=draft_tx
+    )
+
+    assert tx is not None
+    assert isinstance(tx, TxResponse)
+    assert tx.hash is not None
+    assert tx.code == 0

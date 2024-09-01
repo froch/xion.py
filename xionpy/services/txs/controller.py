@@ -79,17 +79,14 @@ class XionTxsController(XionBaseController):
     def submit(
             self,
             tx: "Transaction",  # type: ignore # noqa: F821
-            sender: "Wallet",  # type: ignore # noqa: F821
+            wallet: Optional["Wallet"] = None,  # type: ignore # noqa: F821
             account: Optional["Account"] = None,  # type: ignore # noqa: F821
             gas_limit: Optional[int] = None,
             memo: Optional[str] = None,
     ) -> TxResponse:
-
-        if account is None:
-            account = self.auth.query_account(sender.address())
-
-        if memo is None:
-            memo = self.memo
+        wallet = wallet or self.wallet
+        account = account or self.auth.query_account(wallet.address())
+        memo = memo or self.memo
 
         # estimate the fee for a provided gas limit
         if gas_limit is not None:
@@ -99,24 +96,24 @@ class XionTxsController(XionBaseController):
         else:
             fee = f"{self.cfg.min_fee}{self.cfg.denom_fee}"
             tx.seal(
-                SigningCfg.direct(sender.public_key(), account.sequence),
+                SigningCfg.direct(wallet.public_key(), account.sequence),
                 fee=fee,
                 gas_limit=self.gas_strategy.block_gas_limit(),
                 memo=memo,
             )
-            tx.sign(sender.signer(), self.cfg.chain_id, account.number)
+            tx.sign(wallet.signer(), self.cfg.chain_id, account.number)
             tx.complete()
 
             gas_limit, fee = self.estimate_gas_and_fee(tx)
 
         # build the final transaction
         tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
+            SigningCfg.direct(wallet.public_key(), account.sequence),
             fee=fee,
             gas_limit=gas_limit,
             memo=memo,
         )
-        tx.sign(sender.signer(), self.cfg.chain_id, account.number)
+        tx.sign(wallet.signer(), self.cfg.chain_id, account.number)
         tx.complete()
 
         submitted_tx = self.broadcast(tx)

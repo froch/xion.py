@@ -23,6 +23,7 @@ def test_query_validator_by_moniker():
     assert validator is not None
     assert moniker in validator.moniker
 
+
 def test_query_validator_by_address():
     xion = XionClient(cfg=NetworkConfig.localhost())
     moniker = "ahi"

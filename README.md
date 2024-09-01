@@ -14,25 +14,20 @@ $ rye sync
 
 - Check the `./tests/...` directory for examples for each module.
 
-```bash
-def test_bank_send():
-    m = os.getenv("XION_MNEMONIC", generate_mnemonic())
-    wallet = XionWallet.from_mnemonic(m)
-
-    network = NetworkConfig.localhost()
-    xion = XionClient(network)
+```python
+def test_tx_bank_send(xion):
     amount = 1_000_000
 
-    draft_tx = xion.bank.tx_send(
-        sender=wallet.address(),
-        recipient=wallet.address(),
+    # send to self
+    draft_tx = xion.bank.tx_bank_send(
+        sender=xion.wallet.address(),
+        recipient=xion.wallet.address(),
         amount=amount,
-        denom=network.denom_fee,
+        denom=xion.cfg.denom_fee
     )
 
     tx = xion.txs.submit(
-        tx=draft_tx,
-        sender=wallet,
+        tx=draft_tx
     )
 
     assert tx is not None

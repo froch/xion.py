@@ -25,7 +25,7 @@ from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from xionpy.services.base.coin.model import Coin
+from xionpy.services.base.coin.model import CoinModel
 from xionpy.services.crypto.interface import Signer
 from xionpy.services.crypto.secp256k1.model import PublicKey
 
@@ -70,7 +70,6 @@ class SigningMode(Enum):
 
 @dataclass
 class SigningCfg:
-
     mode: SigningMode
     sequence_num: int
     public_key: PublicKey
@@ -119,11 +118,11 @@ class Transaction:
         return self
 
     def seal(
-        self,
-        signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: str,
-        gas_limit: int,
-        memo: Optional[str] = None,
+            self,
+            signing_cfgs: Union[SigningCfg, List[SigningCfg]],
+            fee: str,
+            gas_limit: int,
+            memo: Optional[str] = None,
     ) -> "Transaction":
         self._state = TxState.Sealed
 
@@ -148,7 +147,7 @@ class Transaction:
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=Fee(amount=Coin.from_list(fee), gas_limit=gas_limit),
+            fee=Fee(amount=CoinModel.to_proto_list(fee), gas_limit=gas_limit),
         )
 
         self._fee = fee
@@ -163,11 +162,11 @@ class Transaction:
         return self
 
     def sign(
-        self,
-        signer: Signer,
-        chain_id: str,
-        account_number: int,
-        deterministic: bool = False,
+            self,
+            signer: Signer,
+            chain_id: str,
+            account_number: int,
+            deterministic: bool = False,
     ) -> "Transaction":
         if self.state != TxState.Sealed:
             raise RuntimeError(
@@ -195,6 +194,7 @@ class Transaction:
         self._state = TxState.Final
         return self
 
+
 @dataclass
 class MessageLog:
     """Message Log."""
@@ -206,7 +206,6 @@ class MessageLog:
 
 @dataclass
 class TxResponse:
-
     hash: str
     height: int
     code: int
@@ -249,7 +248,7 @@ class TxResponse:
 class SubmittedTx:
     def __init__(
             self,
-            client: Any, # type: ignore # noqa: F821
+            client: Any,  # type: ignore # noqa: F821
             tx_hash: str  # type: ignore # noqa: F821
     ):
         self._client = client

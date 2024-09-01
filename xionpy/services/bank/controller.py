@@ -6,6 +6,7 @@ from xionpy.client import XionWallet
 from xionpy.client.exceptions import InvalidDenominationError
 from xionpy.client.networks import NetworkConfig
 from xionpy.crypto.address import Address
+from xionpy.protos.cosmos.bank.v1beta1.bank_pb2 import Input, Output
 from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryBalanceRequest,
@@ -20,12 +21,15 @@ from xionpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryTotalSupplyRequest,
 )
 from xionpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from xionpy.services.bank.messages import msg_send
+from xionpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgMultiSend, MsgSend
+from xionpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from xionpy.services.bank.models import (
     CoinModel,
     DenomOwnerModel,
     DenomUnitModel,
+    InputModel,
     MetadataModel,
+    OutputModel,
     ParamsModel,
     QueryDenomMetadataResponseModel,
     QueryDenomOwnersResponseModel,
@@ -144,7 +148,11 @@ class XionBankController(XionBaseController):
             send_enabled=[self._convert_send_enabled(se) for se in resp.send_enabled]
         )
 
-    def query_spendable_balance_by_denom(self, address: Optional[Address] = None, denom: Optional[str] = None) -> QuerySpendableBalanceByDenomResponseModel:
+    def query_spendable_balance_by_denom(
+            self,
+            address: Optional[Address] = None,
+            denom: Optional[str] = None,
+    ) -> QuerySpendableBalanceByDenomResponseModel:
         address = address or self.wallet.address()
         denom = denom or self.cfg.denom_fee
         req = QuerySpendableBalanceByDenomRequest(
@@ -166,7 +174,7 @@ class XionBankController(XionBaseController):
             balances=[CoinModel(denom=coin.denom, amount=coin.amount) for coin in resp.balances]
         )
 
-    def tx_send(
+    def tx_bank_send(
             self,
             sender: Optional[Address] = None,
             recipient: Optional[Address] = None,
@@ -177,22 +185,54 @@ class XionBankController(XionBaseController):
         recipient = recipient or self.wallet.address()
         denom = denom or self.cfg.denom_fee
 
-        tx = Transaction()
-        tx.add_message(
-            msg_send(
-                from_address=sender,
-                to_address=recipient,
-                amount=amount,
-                denom=denom,
-            )
+        msg = MsgSend(
+            from_address=str(sender),
+            to_address=str(recipient),
+            amount=[Coin(amount=str(amount), denom=denom)],
         )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_bank_multi_send(
+            self,
+            inputs: List[InputModel],
+            outputs: List[OutputModel]
+    ) -> Transaction:
+        msg_inputs = [
+            Input(
+                address=input_.address,
+                coins=[Coin(denom=coin.denom, amount=str(coin.amount)) for coin in input_.coins],
+            ) for input_ in inputs
+        ]
+        msg_outputs = [
+            Output(
+                address=output.address,
+                coins=[Coin(denom=coin.denom, amount=str(coin.amount)) for coin in output.coins],
+            ) for output in outputs
+        ]
+
+        msg = MsgMultiSend(
+            inputs=msg_inputs,
+            outputs=msg_outputs,
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
         return tx
 
     @staticmethod
     def _convert_metadata(metadata) -> MetadataModel:
         return MetadataModel(
             description=metadata.description,
-            denom_units=[DenomUnitModel(denom=unit.denom, exponent=unit.exponent, aliases=list(unit.aliases)) for unit in metadata.denom_units],
+            denom_units=[
+                DenomUnitModel(
+                    denom=unit.denom,
+                    exponent=unit.exponent,
+                    aliases=list(unit.aliases),
+                ) for unit in metadata.denom_units
+            ],
             base=metadata.base,
             display=metadata.display,
             name=metadata.name,

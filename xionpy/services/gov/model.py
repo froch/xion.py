@@ -6,7 +6,7 @@ from typing import Any, List
 from google.protobuf.internal.well_known_types import Timestamp
 from pydantic import BaseModel
 
-from xionpy.services.base.coin.model import Coin
+from xionpy.services.base.coin.model import CoinModel
 
 
 @dataclass
@@ -56,7 +56,7 @@ class Proposal(BaseModel):
     final_tally_result: TallyResult
     submit_time: datetime
     deposit_end_time: datetime
-    total_deposit: List[Coin]
+    total_deposit: List[CoinModel]
     voting_start_time: datetime
     voting_end_time: datetime
     metadata: str
@@ -75,7 +75,7 @@ class Proposal(BaseModel):
             final_tally_result=TallyResult.from_proto(proposal.final_tally_result),
             submit_time=Timestamp.ToDatetime(proposal.submit_time),
             deposit_end_time=Timestamp.ToDatetime(proposal.deposit_end_time),
-            total_deposit=[Coin.from_proto(coin) for coin in proposal.total_deposit],
+            total_deposit=[CoinModel.from_proto(coin) for coin in proposal.total_deposit],
             voting_start_time=Timestamp.ToDatetime(proposal.voting_start_time),
             voting_end_time=Timestamp.ToDatetime(proposal.voting_end_time),
             metadata=proposal.metadata,
