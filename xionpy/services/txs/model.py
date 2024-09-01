@@ -25,7 +25,7 @@ from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from xionpy.services.base.coin.model import CoinModel
+from xionpy.services.base.coin.models import CoinModel
 from xionpy.services.crypto.interface import Signer
 from xionpy.services.crypto.secp256k1.model import PublicKey
 

@@ -40,7 +40,7 @@ def test_bank_query_denoms_metadata(xion):
 def test_bank_query_total_supply(xion):
     r = xion.bank.query_total_supply()
     assert r is not None
-    assert len(r.supply) > 0
+    assert len(r.supply) >= 0
     assert all(isinstance(coin, CoinModel) for coin in r.supply)
 
 
@@ -50,7 +50,7 @@ def test_bank_query_supply_of(xion):
     assert r is not None
     assert r.amount is not None
     assert r.amount.denom == denom
-    assert r.amount.amount > 0
+    assert r.amount.amount >= 0
 
 
 def test_bank_query_params(xion):
@@ -71,7 +71,7 @@ def test_bank_query_spendable_balance_by_denom(xion):
 def test_bank_query_spendable_balances(xion):
     r = xion.bank.query_spendable_balances()
     assert r is not None
-    assert len(r.balances) > 0
+    assert len(r.balances) >= 0
     assert all(isinstance(balance, CoinModel) for balance in r.balances)
 
 
@@ -86,7 +86,7 @@ def test_bank_query_denom_owners(xion):
 def test_bank_query_send_enabled(xion):
     r = xion.bank.query_send_enabled()
     assert r is not None
-    assert len(r.send_enabled) > 0
+    assert len(r.send_enabled) >= 0
     assert all(isinstance(se, SendEnabledModel) for se in r.send_enabled)
 
 

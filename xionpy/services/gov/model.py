@@ -6,7 +6,7 @@ from typing import Any, List
 from google.protobuf.internal.well_known_types import Timestamp
 from pydantic import BaseModel
 
-from xionpy.services.base.coin.model import CoinModel
+from xionpy.services.base.coin.models import CoinModel
 
 
 @dataclass

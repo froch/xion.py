@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from xionpy.services.base.coin.model import CoinModel
+from xionpy.services.base.coin.models import CoinModel
 
 
 class SendAuthorizationModel(BaseModel):

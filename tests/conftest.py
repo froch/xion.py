@@ -3,6 +3,7 @@ import os
 import pytest
 
 from xionpy.client.wallet import XionWallet
+from xionpy.crypto.address import Address
 from xionpy.crypto.mnemonic import generate_mnemonic
 
 
@@ -19,3 +20,7 @@ def xion():
     wallet = XionWallet.from_mnemonic(m)
     xion = XionClient(cfg=NetworkConfig.xion_testnet_1(), wallet=wallet)
     return xion
+
+@pytest.fixture(scope='function')
+def nakanodo():
+    return Address(value="xionvaloper1nc8krpxkj6q3grxvs9ucskfq9rkts9v987h6xy")

@@ -1,150 +1,149 @@
-from google.protobuf.json_format import Parse
-
 from xionpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
-    QueryDelegationResponse,
     QueryDelegatorDelegationsRequest,
-    QueryDelegatorDelegationsResponse,
     QueryDelegatorUnbondingDelegationsRequest,
-    QueryDelegatorUnbondingDelegationsResponse,
     QueryDelegatorValidatorRequest,
-    QueryDelegatorValidatorResponse,
     QueryDelegatorValidatorsRequest,
-    QueryDelegatorValidatorsResponse,
     QueryHistoricalInfoRequest,
-    QueryHistoricalInfoResponse,
     QueryParamsRequest,
-    QueryParamsResponse,
     QueryPoolRequest,
-    QueryPoolResponse,
     QueryRedelegationsRequest,
-    QueryRedelegationsResponse,
     QueryUnbondingDelegationRequest,
-    QueryUnbondingDelegationResponse,
     QueryValidatorDelegationsRequest,
-    QueryValidatorDelegationsResponse,
     QueryValidatorRequest,
-    QueryValidatorResponse,
     QueryValidatorUnbondingDelegationsRequest,
-    QueryValidatorUnbondingDelegationsResponse,
     QueryValidatorsRequest,
-    QueryValidatorsResponse,
 )
 from xionpy.services.rest import XionBaseRestClient
 from xionpy.services.staking.interface import Staking
+from xionpy.services.staking.models import (
+    QueryDelegationResponseModel,
+    QueryDelegatorDelegationsResponseModel,
+    QueryDelegatorUnbondingDelegationsResponseModel,
+    QueryDelegatorValidatorResponseModel,
+    QueryDelegatorValidatorsResponseModel,
+    QueryHistoricalInfoResponseModel,
+    QueryParamsResponseModel,
+    QueryPoolResponseModel,
+    QueryRedelegationsResponseModel,
+    QueryUnbondingDelegationResponseModel,
+    QueryValidatorDelegationsResponseModel,
+    QueryValidatorResponseModel,
+    QueryValidatorUnbondingDelegationsResponseModel,
+    QueryValidatorsResponseModel,
+)
 
 
 class StakingRestClient(Staking):
-
     API_URL = "/cosmos/staking/v1beta1"
 
     def __init__(self, rest_api: XionBaseRestClient) -> None:
         self._rest_api = rest_api
 
-    def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
+    def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponseModel:
         json_response = self._rest_api.get(f"{self.API_URL}/validators", request)
-        return Parse(json_response, QueryValidatorsResponse())
+        return QueryValidatorsResponseModel(**json_response)
 
-    def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
+    def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}",
         )
-        return Parse(json_response, QueryValidatorResponse())
+        return QueryValidatorResponseModel(**json_response)
 
     def ValidatorDelegations(
-        self, request: QueryValidatorDelegationsRequest
-    ) -> QueryValidatorDelegationsResponse:
+            self, request: QueryValidatorDelegationsRequest
+    ) -> QueryValidatorDelegationsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations",
             request,
             ["validatorAddr"],
         )
-        return Parse(json_response, QueryValidatorDelegationsResponse())
+        return QueryValidatorDelegationsResponseModel(**json_response)
 
     def ValidatorUnbondingDelegations(
-        self, request: QueryValidatorUnbondingDelegationsRequest
-    ) -> QueryValidatorUnbondingDelegationsResponse:
+            self, request: QueryValidatorUnbondingDelegationsRequest
+    ) -> QueryValidatorUnbondingDelegationsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/unbonding_delegations",
             request,
             ["validatorAddr"],
         )
-        return Parse(json_response, QueryValidatorUnbondingDelegationsResponse())
+        return QueryValidatorUnbondingDelegationsResponseModel(**json_response)
 
-    def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
+    def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}",
         )
-        return Parse(json_response, QueryDelegationResponse())
+        return QueryDelegationResponseModel(**json_response)
 
     def UnbondingDelegation(
-        self, request: QueryUnbondingDelegationRequest
-    ) -> QueryUnbondingDelegationResponse:
+            self, request: QueryUnbondingDelegationRequest
+    ) -> QueryUnbondingDelegationResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}/unbonding_delegation",
         )
-        return Parse(json_response, QueryUnbondingDelegationResponse())
+        return QueryUnbondingDelegationResponseModel(**json_response)
 
     def DelegatorDelegations(
-        self, request: QueryDelegatorDelegationsRequest
-    ) -> QueryDelegatorDelegationsResponse:
+            self, request: QueryDelegatorDelegationsRequest
+    ) -> QueryDelegatorDelegationsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegations/{request.delegator_addr}",
             request,
             ["delegatorAddr"],
         )
-        return Parse(json_response, QueryDelegatorDelegationsResponse())
+        return QueryDelegatorDelegationsResponseModel(**json_response)
 
     def DelegatorUnbondingDelegations(
-        self, request: QueryDelegatorUnbondingDelegationsRequest
-    ) -> QueryDelegatorUnbondingDelegationsResponse:
+            self, request: QueryDelegatorUnbondingDelegationsRequest
+    ) -> QueryDelegatorUnbondingDelegationsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/unbonding_delegations",
             request,
             ["delegatorAddr"],
         )
-        return Parse(json_response, QueryDelegatorUnbondingDelegationsResponse())
+        return QueryDelegatorUnbondingDelegationsResponseModel(**json_response)
 
     def Redelegations(
-        self, request: QueryRedelegationsRequest
-    ) -> QueryRedelegationsResponse:
+            self, request: QueryRedelegationsRequest
+    ) -> QueryRedelegationsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/redelegations",
             request,
             ["delegatorAddr"],
         )
-        return Parse(json_response, QueryRedelegationsResponse())
+        return QueryRedelegationsResponseModel(**json_response)
 
     def DelegatorValidators(
-        self, request: QueryDelegatorValidatorsRequest
-    ) -> QueryDelegatorValidatorsResponse:
+            self, request: QueryDelegatorValidatorsRequest
+    ) -> QueryDelegatorValidatorsResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/validators",
             request,
             ["delegatorAddr"],
         )
-        return Parse(json_response, QueryDelegatorValidatorsResponse())
+        return QueryDelegatorValidatorsResponseModel(**json_response)
 
     def DelegatorValidator(
-        self, request: QueryDelegatorValidatorRequest
-    ) -> QueryDelegatorValidatorResponse:
+            self, request: QueryDelegatorValidatorRequest
+    ) -> QueryDelegatorValidatorResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/validators/{request.validator_addr}",
         )
-        return Parse(json_response, QueryDelegatorValidatorResponse())
+        return QueryDelegatorValidatorResponseModel(**json_response)
 
     def HistoricalInfo(
-        self, request: QueryHistoricalInfoRequest
-    ) -> QueryHistoricalInfoResponse:
+            self, request: QueryHistoricalInfoRequest
+    ) -> QueryHistoricalInfoResponseModel:
         json_response = self._rest_api.get(
             f"{self.API_URL}/historical_info/{request.height}"
         )
-        return Parse(json_response, QueryHistoricalInfoResponse())
+        return QueryHistoricalInfoResponseModel(**json_response)
 
-    def Pool(self, request: QueryPoolRequest) -> QueryPoolResponse:
+    def Pool(self, request: QueryPoolRequest) -> QueryPoolResponseModel:
         json_response = self._rest_api.get(f"{self.API_URL}/pool")
-        return Parse(json_response, QueryPoolResponse())
+        return QueryPoolResponseModel(**json_response)
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(self, request: QueryParamsRequest) -> QueryParamsResponseModel:
         json_response = self._rest_api.get(f"{self.API_URL}/params")
-        return Parse(json_response, QueryParamsResponse())
+        return QueryParamsResponseModel(**json_response)
