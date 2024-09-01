@@ -26,11 +26,10 @@ def get_paginated(
         request.pagination.CopyFrom(pagination)
 
         resp = request_method(request)
-
         pages.append(resp)
-
         pagination = None
 
         if resp.pagination.next_key:
             pagination = PageRequest(limit=per_page_limit, key=resp.pagination.next_key)
+
     return pages

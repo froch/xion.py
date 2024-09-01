@@ -5,11 +5,11 @@ import re
 from typing import List, Optional, Tuple
 
 from xionpy.crypto.hashfuncs import sha256
-from xionpy.services.crypto.secp256k1.model import PrivateKey
 from xionpy.crypto.mnemonic.words import (
     ENGLISH_MNEMONIC_WORDS,
     ENGLISH_MNEMONIC_WORDS_LIST,
 )
+from xionpy.services.crypto.secp256k1.model import PrivateKey
 
 
 SEED_MIN_BYTE_LEN = 16

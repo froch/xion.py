@@ -4,8 +4,6 @@ from typing import List
 
 from pydantic import BaseModel
 
-from xionpy.services.crypto.secp256k1.model import PublicKey
-
 
 class BondStatus(Enum):
     UNSPECIFIED = "BOND_STATUS_UNSPECIFIED"

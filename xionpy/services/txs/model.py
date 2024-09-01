@@ -14,8 +14,6 @@ from xionpy.client.exceptions import (
     OutOfGasError,
 )
 from xionpy.crypto.address import Address
-from xionpy.services.crypto.interface import Signer
-from xionpy.services.crypto.secp256k1.model import PublicKey
 from xionpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from xionpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
@@ -28,6 +26,8 @@ from xionpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     TxBody,
 )
 from xionpy.services.base.coin.model import Coin
+from xionpy.services.crypto.interface import Signer
+from xionpy.services.crypto.secp256k1.model import PublicKey
 
 
 class TxState(Enum):
