@@ -8,6 +8,7 @@ from xionpy.client import NetworkConfig, XionWallet
 from xionpy.client.exceptions import NotFoundError
 from xionpy.crypto.address import Address
 from xionpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
+from xionpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from xionpy.protos.cosmos.crypto.ed25519 import (  # noqa: F401  # pylint: disable=unused-import
     keys_pb2,
 )
@@ -26,6 +27,15 @@ from xionpy.protos.cosmos.staking.v1beta1.query_pb2 import (
 )
 from xionpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
+)
+from xionpy.protos.cosmos.staking.v1beta1.tx_pb2 import (
+    MsgBeginRedelegate,
+    MsgCancelUnbondingDelegation,
+    MsgCreateValidator,
+    MsgDelegate,
+    MsgEditValidator,
+    MsgUndelegate,
+    MsgUpdateParams,
 )
 from xionpy.services.controller import XionBaseController
 from xionpy.services.staking.models import (
@@ -48,6 +58,7 @@ from xionpy.services.staking.models import (
     ValidatorModel,
 )
 from xionpy.services.staking.rest import StakingRestClient
+from xionpy.services.txs.model import Transaction
 
 
 class XionStakingController(XionBaseController):
@@ -277,7 +288,7 @@ class XionStakingController(XionBaseController):
         resp = self.client.Params(req)
         data = MessageToDict(resp.params, preserving_proto_field_name=True)
 
-        r =  TypeAdapter(
+        r = TypeAdapter(
             QueryParamsResponseModel
         ).validate_python(
             {"params": data}
@@ -372,3 +383,199 @@ class XionStakingController(XionBaseController):
             "unbonding_responses": unbonding_responses_data,
             "pagination": pagination_data
         })
+
+    def tx_create_validator(
+            self,
+            description: dict,
+            commission: dict,
+            min_self_delegation: str,
+            delegator_address: Union[str, Address],
+            validator_address: Union[str, Address],
+            pubkey: bytes,
+            amount: int,
+            denom: str,
+    ) -> Transaction:
+        """
+        Create a new validator transaction.
+        :param description:
+        :param commission:
+        :param min_self_delegation:
+        :param delegator_address:
+        :param validator_address:
+        :param pubkey:
+        :param amount:
+        :param denom:
+        :return:
+        """
+
+        msg = MsgCreateValidator(
+            description=description,
+            commission=commission,
+            min_self_delegation=min_self_delegation,
+            delegator_address=str(delegator_address),
+            validator_address=str(validator_address),
+            pubkey=pubkey,
+            value=Coin(amount=str(amount), denom=denom),
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_edit_validator(
+            self,
+            validator_address: Union[str, Address],
+            description: Optional[dict] = None,
+            commission_rate: Optional[str] = None,
+            min_self_delegation: Optional[str] = None,
+    ) -> Transaction:
+        """
+        Edit a validator transaction.
+        :param validator_address:
+        :param description:
+        :param commission_rate:
+        :param min_self_delegation:
+        :return:
+        """
+
+        msg = MsgEditValidator(
+            validator_address=str(validator_address),
+            description=description,
+            commission_rate=commission_rate,
+            min_self_delegation=min_self_delegation,
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_delegate(
+            self,
+            delegator_address: Union[str, Address],
+            validator_address: Union[str, Address],
+            amount: int,
+            denom: str,
+    ) -> Transaction:
+        """
+        Delegate tokens to a validator transaction.
+        :param delegator_address:
+        :param validator_address:
+        :param amount:
+        :param denom:
+        :return:
+        """
+
+        msg = MsgDelegate(
+            delegator_address=str(delegator_address),
+            validator_address=str(validator_address),
+            amount=Coin(amount=str(amount), denom=denom),
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_begin_redelegate(
+            self,
+            delegator_address: Union[str, Address],
+            validator_src_address: Union[str, Address],
+            validator_dst_address: Union[str, Address],
+            amount: int,
+            denom: str,
+    ) -> Transaction:
+        """
+        Redelegate tokens from one validator to another transaction.
+        :param delegator_address:
+        :param validator_src_address:
+        :param validator_dst_address:
+        :param amount:
+        :param denom:
+        :return:
+        """
+
+        msg = MsgBeginRedelegate(
+            delegator_address=str(delegator_address),
+            validator_src_address=str(validator_src_address),
+            validator_dst_address=str(validator_dst_address),
+            amount=Coin(amount=str(amount), denom=denom),
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_undelegate(
+            self,
+            delegator_address: Union[str, Address],
+            validator_address: Union[str, Address],
+            amount: int,
+            denom: str,
+    ) -> Transaction:
+        """
+        Undelegate tokens from a validator transaction.
+        :param delegator_address:
+        :param validator_address:
+        :param amount:
+        :param denom:
+        :return:
+        """
+
+        msg = MsgUndelegate(
+            delegator_address=str(delegator_address),
+            validator_address=str(validator_address),
+            amount=Coin(amount=str(amount), denom=denom),
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_cancel_unbonding_delegation(
+            self,
+            delegator_address: Union[str, Address],
+            validator_address: Union[str, Address],
+            amount: int,
+            denom: str,
+            creation_height: int,
+    ) -> Transaction:
+        """
+        Cancel unbonding delegation transaction.
+        :param delegator_address:
+        :param validator_address:
+        :param amount:
+        :param denom:
+        :param creation_height:
+        :return:
+        """
+
+        msg = MsgCancelUnbondingDelegation(
+            delegator_address=str(delegator_address),
+            validator_address=str(validator_address),
+            amount=Coin(amount=str(amount), denom=denom),
+            creation_height=creation_height,
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
+
+    def tx_update_params(
+            self,
+            authority: str,
+            params: dict,
+    ) -> Transaction:
+        """
+        Update staking module parameters transaction.
+        :param authority:
+        :param params:
+        :return:
+        """
+
+        msg = MsgUpdateParams(
+            authority=authority,
+            params=params,
+        )
+
+        tx = Transaction()
+        tx.add_message(msg)
+        return tx
