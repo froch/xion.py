@@ -12,8 +12,9 @@ from xionpy.services.txs.model import TxResponse
 def test_bank_query_balances(xion):
     balance = xion.bank.query_balances()
     assert balance is not None
-    assert isinstance(balance, int)
-    assert balance >= 0
+    assert isinstance(balance, CoinModel)
+    assert balance.denom == xion.cfg.denom_fee
+    assert balance.amount >= 0
 
 
 def test_bank_query_all_balances(xion):

@@ -11,7 +11,7 @@ class SendAuthorizationModel(BaseModel):
 
 
 class ParamsModel(BaseModel):
-    send_enabled: List["SendEnabledModel"]
+    send_enabled: Optional[List["SendEnabledModel"]] = None
     default_send_enabled: bool
 
 
@@ -36,7 +36,7 @@ class SupplyModel(BaseModel):
 
 class DenomUnitModel(BaseModel):
     denom: str
-    exponent: int
+    exponent: Optional[int] = None
     aliases: Optional[List[str]] = None
 
 
