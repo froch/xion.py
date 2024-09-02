@@ -8,27 +8,27 @@ from xionpy.services.base.coin.models import CoinModel
 from xionpy.services.base.tendermint.models import HeaderModel
 
 
-class BondStatus(Enum):
+class BondStatusEnum(Enum):
     UNSPECIFIED = "BOND_STATUS_UNSPECIFIED"
     UNBONDED = "BOND_STATUS_UNBONDED"
     UNBONDING = "BOND_STATUS_UNBONDING"
     BONDED = "BOND_STATUS_BONDED"
 
     @classmethod
-    def from_proto(cls, value: str) -> "BondStatus":
+    def from_proto(cls, value: str) -> "BondStatusEnum":
         for status in cls:
             if status.value == value:
                 return status
         raise ValueError(f"Invalid BOND_STATUS: {value}")
 
 
-class Infraction(Enum):
+class InfractionEnum(Enum):
     UNSPECIFIED = "INFRACTION_UNSPECIFIED"
     DOUBLE_SIGN = "INFRACTION_DOUBLE_SIGN"
     DOWNTIME = "INFRACTION_DOWNTIME"
 
     @classmethod
-    def from_proto(cls, value: int) -> "Infraction":
+    def from_proto(cls, value: int) -> "InfractionEnum":
         if value == 0:
             return cls.UNSPECIFIED
         if value == 1:
@@ -64,7 +64,7 @@ class ValidatorModel(BaseModel):
     operator_address: str
     consensus_pubkey: Union[bytes, dict]
     jailed: Optional[bool] = Field(default=False)
-    status: BondStatus
+    status: BondStatusEnum
     tokens: str
     delegator_shares: str
     description: ValidatorDescriptionModel
@@ -83,7 +83,7 @@ class ValidatorModel(BaseModel):
 
     @field_validator("status", mode="before")
     def parse_status(cls, v):
-        return BondStatus.from_proto(v)
+        return BondStatusEnum.from_proto(v)
 
     @field_validator("unbonding_time", mode="before")
     def parse_unbonding_time(cls, v):

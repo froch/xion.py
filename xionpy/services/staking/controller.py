@@ -28,7 +28,7 @@ from xionpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
 )
 from xionpy.services.controller import XionBaseController
 from xionpy.services.staking.models import (
-    BondStatus,
+    BondStatusEnum,
     DelegationResponseModel,
     QueryDelegationResponseModel,
     QueryDelegatorDelegationsResponseModel,
@@ -79,16 +79,16 @@ class XionStakingController(XionBaseController):
 
     def query_validators(
             self,
-            status: Optional[Union[str, BondStatus]] = None
+            status: Optional[Union[str, BondStatusEnum]] = None
     ) -> List[ValidatorModel]:
         """
         Query all validators that match the given status.
         :return:
         """
 
-        filtered_status = status or BondStatus.BONDED
+        filtered_status = status or BondStatusEnum.BONDED
         req = QueryValidatorsRequest()
-        if filtered_status != BondStatus.UNSPECIFIED:
+        if filtered_status != BondStatusEnum.UNSPECIFIED:
             req.status = filtered_status.value
 
         resp = self.client.Validators(req)
@@ -114,7 +114,7 @@ class XionStakingController(XionBaseController):
         :return:
         """
 
-        r = self.query_validators(BondStatus.UNSPECIFIED)
+        r = self.query_validators(BondStatusEnum.UNSPECIFIED)
         val = next((v for v in r if moniker in v.description.moniker), None)
 
         if not val:

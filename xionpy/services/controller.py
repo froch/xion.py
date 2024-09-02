@@ -16,7 +16,7 @@ class XionBaseController:
     def __init__(
         self,
         cfg: NetworkConfig = NetworkConfig.localhost(),
-        wallet: XionWallet = None,
+        wallet: XionWallet | None = None,
     ):
 
         self.cfg = cfg

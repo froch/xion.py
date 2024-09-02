@@ -2,6 +2,7 @@ from xionpy.client.networks import NetworkConfig
 from xionpy.client.wallet import XionWallet
 from xionpy.services.auth.controller import XionAuthController
 from xionpy.services.bank.controller import XionBankController
+from xionpy.services.base.tendermint.controller import XionTendermintController
 from xionpy.services.gov.controller import XionGovController
 from xionpy.services.staking.controller import XionStakingController
 from xionpy.services.txs.controller import XionTxsController
@@ -38,5 +39,6 @@ class XionClient:
         self.bank = XionBankController(cfg, wallet)
         self.gov = XionGovController(cfg, wallet)
         self.staking = XionStakingController(cfg, wallet)
+        self.tendermint = XionTendermintController(cfg)
 
         self.txs = XionTxsController(cfg, wallet, self.gas_strategy, self.auth)
