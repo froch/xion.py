@@ -26,6 +26,10 @@ grpcio==1.65.5
     # via xionpy
 idna==3.7
     # via requests
+jaraco-functools==4.0.2
+    # via tempora
+more-itertools==10.4.0
+    # via jaraco-functools
 protobuf==5.28.0
     # via xionpy
 pycryptodome==3.20.0
@@ -35,12 +39,15 @@ pydantic==2.8.2
 pydantic-core==2.20.1
     # via pydantic
 python-dateutil==2.9.0.post0
+    # via tempora
     # via xionpy
 requests==2.32.3
     # via xionpy
 six==1.16.0
     # via ecdsa
     # via python-dateutil
+tempora==5.7.0
+    # via xionpy
 typing-extensions==4.12.2
     # via pydantic
     # via pydantic-core

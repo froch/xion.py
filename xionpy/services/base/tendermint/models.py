@@ -19,6 +19,19 @@ class SignedMsgTypeEnum(Enum):
         raise ValueError(f"Invalid SIGNED_MSG_TYPE: {value}")
 
 
+class PageRequestModel(BaseModel):
+    key: Optional[bytes]
+    offset: Optional[int]
+    limit: Optional[int]
+    count_total: Optional[bool]
+    reverse: Optional[bool]
+
+
+class PageResponseModel(BaseModel):
+    next_key: Optional[bytes] = None
+    total: Optional[int] = None
+
+
 class ConsensusModel(BaseModel):
     block: Optional[int]
     app: Optional[int] = None
@@ -186,18 +199,6 @@ class ABCIQueryResponseModel(BaseModel):
     proof_ops: Optional[ProofOpsModel]
     height: Optional[int]
     codespace: Optional[str]
-
-
-class PageRequestModel(BaseModel):
-    key: Optional[str]
-    offset: Optional[int]
-    limit: Optional[int]
-    count_total: Optional[bool]
-
-
-class PageResponseModel(BaseModel):
-    next_key: Optional[str] = None
-    total: Optional[int]
 
 
 class GetValidatorSetByHeightRequestModel(BaseModel):

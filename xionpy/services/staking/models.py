@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import List, Optional, Union
 
+import tempora
 from pydantic import BaseModel, Field, field_validator
 
 from xionpy.services.base.coin.models import CoinModel
-from xionpy.services.base.tendermint.models import HeaderModel
+from xionpy.services.base.tendermint.models import HeaderModel, PageResponseModel
 
 
 class BondStatusEnum(Enum):
@@ -102,7 +103,7 @@ class UnbondingDelegationEntryModel(BaseModel):
     initial_balance: str
     balance: str
     unbonding_id: int
-    unbonding_on_hold_ref_count: int
+    unbonding_on_hold_ref_count: Optional[int] = None
 
 
 class UnbondingDelegationModel(BaseModel):
@@ -128,8 +129,8 @@ class RedelegationModel(BaseModel):
 
 
 class PoolModel(BaseModel):
-    not_bonded_tokens: str
-    bonded_tokens: str
+    not_bonded_tokens: int
+    bonded_tokens: int
 
 
 class ParamsModel(BaseModel):
@@ -139,6 +140,10 @@ class ParamsModel(BaseModel):
     historical_entries: int
     bond_denom: str
     min_commission_rate: str
+
+    @field_validator("unbonding_time", mode="before")
+    def parse_unbonding_time(cls, v):
+        return tempora.parse_timedelta(v)
 
 
 class DelegationResponseModel(BaseModel):
@@ -199,6 +204,7 @@ class QueryParamsResponseModel(BaseModel):
 
 class QueryValidatorDelegationsResponseModel(BaseModel):
     delegation_responses: List[DelegationResponseModel]
+    pagination: Optional[PageResponseModel]
 
 
 class QueryValidatorUnbondingDelegationsResponseModel(BaseModel):

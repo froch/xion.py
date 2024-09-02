@@ -30,10 +30,14 @@ idna==3.7
 iniconfig==2.0.0
     # via pytest
 isort==5.13.2
+jaraco-functools==4.0.2
+    # via tempora
 markdown-it-py==3.0.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
+more-itertools==10.4.0
+    # via jaraco-functools
 packaging==24.1
     # via pytest
 pbr==6.0.0
@@ -52,6 +56,7 @@ pygments==2.18.0
     # via rich
 pytest==8.3.2
 python-dateutil==2.9.0.post0
+    # via tempora
     # via xionpy
 python-dotenv==1.0.1
 pyyaml==6.0.2
@@ -66,6 +71,8 @@ six==1.16.0
     # via python-dateutil
 stevedore==5.2.0
     # via bandit
+tempora==5.7.0
+    # via xionpy
 typing-extensions==4.12.2
     # via pydantic
     # via pydantic-core
